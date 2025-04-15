@@ -3,9 +3,12 @@ import os
 from flask import Blueprint, jsonify, request
 import requests
 from app.database import collection  # 确保正确导入 MongoDB 连接
+import openai
+from dotenv import load_dotenv
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))  # 确保 `app` 目录在路径里
-
 
 job_api = Blueprint("job_api", __name__)
 
@@ -15,32 +18,36 @@ HEADERS = {
     "X-RapidAPI-Key": "eaa381d7f1msh6d53c9dad8ab410p118824jsneb2763f234dd"
 }
 
+# ✅ 向量生成函数（使用 OpenAI）
+def generate_embedding(text, model="text-embedding-3-small"):
+    try:
+        response = openai.embeddings.create(input=[text], model=model)
+        return response.data[0].embedding
+    except Exception as e:
+        print(f"⚠️ Failed to generate embedding: {e}")
+        return None
+
+# ✅ 主逻辑函数：爬取 + 向量计算 + 入库
 def fetch_and_store_jobs(query="developer", location=None, max_pages=3, remote_only=None, min_salary=None, date_posted=None):
     print("🚀 Fetching jobs with filters...")
 
-    all_jobs = []
     for page in range(1, max_pages + 1):
         print(f"📡 Fetching page {page}...")
 
-        # 构造请求参数
         params = {
             "query": query,
-            "num_pages": page,  # 控制获取多少页数据
+            "num_pages": page,
         }
 
-        if location:  # 只有用户提供了 location，才加进去
+        if location:
             params["location"] = location
-
-        if remote_only is not None:  # 允许 False 值，所以要用 `is not None` 判断
+        if remote_only is not None:
             params["remote_jobs_only"] = str(remote_only).lower()
-
-        if min_salary:  # 只有提供了最小薪资才过滤
+        if min_salary:
             params["salary_min"] = min_salary
-
-        if date_posted:  # 只过滤有时间要求的
+        if date_posted:
             params["date_posted"] = date_posted
 
-        # 发送 API 请求
         response = requests.get(API_URL, headers=HEADERS, params=params)
         print(f"📡 API response code: {response.status_code}")
 
@@ -60,9 +67,17 @@ def fetch_and_store_jobs(query="developer", location=None, max_pages=3, remote_o
                     "salary": job.get("job_salary", "N/A"),
                     "apply_link": job.get("job_apply_link", "N/A"),
                     "posted_at": job.get("job_posted_at", "N/A"),
-                    "job_description": job.get("job_description", "N/A")  # 新增 JD
+                    "job_description": job.get("job_description", "N/A")
                 }
 
+                # 👇 拼接文本用于生成向量
+                full_text = f"{job_record['title']} at {job_record['company']}. {job_record['job_description']}"
+                embedding = generate_embedding(full_text)
+
+                if embedding:
+                    job_record["embedding"] = embedding
+
+                # ❗避免重复插入
                 if not collection.find_one({"apply_link": job_record["apply_link"]}):
                     collection.insert_one(job_record)
                     print(f"📌 Stored job: {job_record['title']} - {job_record['company']}")
@@ -74,9 +89,7 @@ def fetch_and_store_jobs(query="developer", location=None, max_pages=3, remote_o
     print("🎯 Data successfully stored in MongoDB")
 
 
-
-
-# ✅ 提供 API 端点，让前端调用这个函数
+# ✅ API 端点
 @job_api.route("/fetch_jobs", methods=["GET"])
 def fetch_jobs_endpoint():
     query = request.args.get("query", "developer")

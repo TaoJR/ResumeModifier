@@ -1,12 +1,12 @@
 from pymongo import MongoClient
 
-# 连接本地 MongoDB
-client = MongoClient("mongodb://host.docker.internal:27017/")
 
-# 创建数据库和集合
-db = client["jobSearch"]  # 数据库名称
-collection = db["jobs"]  # 集合（类似 SQL 的表）
+client = MongoClient("mongodb://mongo:27017")
 
+# ✅ 选择数据库（可以自己命名，比如 resumemodifier）
+db = client["jobSearch"]
 
+# ✅ 选择集合名（比如 jobs）
+collection = db["jobs"]
 
 
