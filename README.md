@@ -4,7 +4,7 @@ A Flask-based backend service for fetching, storing, and matching job postings w
 
 ---
 
-## 🚀 Features
+## Features
 
 - Fetch jobs from RapidAPI (JSearch API)
 - Store jobs in MongoDB (with OpenAI vector embedding)
@@ -14,7 +14,7 @@ A Flask-based backend service for fetching, storing, and matching job postings w
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 - Docker
 - Docker Compose
@@ -23,7 +23,7 @@ A Flask-based backend service for fetching, storing, and matching job postings w
 
 ---
 
-## 🛠️ Setup & Usage
+## Setup & Usage
 
 ### 1. Clone this repo
 
@@ -42,7 +42,7 @@ echo "OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > .env
 
 Replace the value with your actual OpenAI key.
 
-> ⚠️ Do **NOT** commit `.env` to GitHub.
+> Do **NOT** commit `.env` to GitHub.
 
 ### 3. Build and start the containers
 
@@ -56,7 +56,7 @@ This will:
 
 ---
 
-## 🔍 API Endpoints
+## API Endpoints
 
 ### `/jobs/fetch_jobs` (GET)
 Fetch jobs from API and store them with embedding.
@@ -95,7 +95,7 @@ curl -X POST http://localhost:5000/api/match_jobs \
 
 ---
 
-## 🧠 Architecture
+## Architecture
 
 - `app/job_api.py`: Job fetching & embedding logic
 - `app/routes.py`: Resume-job matching logic
@@ -105,7 +105,7 @@ curl -X POST http://localhost:5000/api/match_jobs \
 
 ---
 
-## 🧪 Testing MongoDB (optional)
+## Testing MongoDB (optional)
 
 You can connect with [MongoDB Compass](https://www.mongodb.com/try/download/compass):
 - **Host**: `localhost`
@@ -115,12 +115,8 @@ You can connect with [MongoDB Compass](https://www.mongodb.com/try/download/comp
 
 ---
 
-## 👥 Contributors
+## Contributors
 - @TaoJR — Backend / Docker / Matching logic
-- Add your teammates here...
 
 ---
-
-## 📌 License
-MIT
 
