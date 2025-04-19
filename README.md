@@ -77,7 +77,6 @@ Match user resume with top-k job embeddings.
 **Request body** (JSON):
 ```json
 {
-  "resume": "Experienced Python backend developer with MongoDB and Flask knowledge.",
   "candidate_keywords": ["Python", "Flask", "MongoDB"],
   "top_k": 5
 }
