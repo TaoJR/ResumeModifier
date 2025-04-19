@@ -71,25 +71,26 @@ curl "http://localhost:5000/jobs/fetch_jobs?query=Python&max_pages=1"
 
 ---
 
-### `/api/match_jobs` (POST)
-Match user resume with top-k job embeddings.
+### Match Jobs API
 
-**Request body** (JSON):
+Matches the user’s skills with top-k job listings based on OpenAI embedding similarity.
+
+**Endpoint:** `POST /api/match_jobs`  
+**Content-Type:** `application/json`
+
+**Request Body:**
+
 ```json
 {
-  "candidate_keywords": ["Python", "Flask", "MongoDB"],
+  "candidate_keywords": "Python Flask MongoDB backend",
   "top_k": 5
 }
 ```
 
 ```bash
-curl -X POST http://localhost:5000/api/match_jobs \
-  -H "Content-Type: application/json" \
-  -d '{
-        "resume": "Experienced Python backend developer with MongoDB and Flask knowledge.",
-        "candidate_keywords": ["Python", "Flask", "MongoDB"],
-        "top_k": 5
-      }'
+curl -X POST http://localhost:5000/api/match_jobs ^
+  -H "Content-Type: application/json" ^
+  -d "{\"candidate_keywords\": \"Python Flask MongoDB backend\", \"top_k\": 5}"
 ```
 
 ---
