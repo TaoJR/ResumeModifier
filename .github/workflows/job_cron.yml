@@ -25,4 +25,4 @@ jobs:
     - name: Run update and clean script
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: python scripts/update_and_clean_jobs.py
+      run: python app/update_and_clean_jobs.py
