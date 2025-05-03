@@ -1,0 +1,28 @@
+name: Update and Clean Jobs
+
+on:
+  schedule:
+    - cron: "0 4 * * *"  # 每天 UTC 4 点运行（可修改）
+  workflow_dispatch:  # 可手动触发
+
+jobs:
+  scheduled_job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        pip install pymongo requests python-dotenv openai
+
+    - name: Run update and clean script
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: python scripts/update_and_clean_jobs.py
