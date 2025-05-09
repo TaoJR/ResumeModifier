@@ -15,16 +15,16 @@ def remove_expired_jobs(days=30):
     })
     print(f"🧹 Deleted {result.deleted_count} expired jobs older than {days} days.")
 
-def update_jobs():
-    print("🚀 Starting scheduled job update...")
-    keywords = [
-        "software engineer", "backend developer", "frontend developer",
-        "data scientist", "java developer", "python developer"
-    ]
-    for keyword in keywords:
-        fetch_and_store_jobs(query=keyword, max_pages=2)
-    print("✅ Update complete.")
+# def update_jobs():
+#     print("🚀 Starting scheduled job update...")
+#     keywords = [
+#         "software engineer", "backend developer", "frontend developer",
+#         "data scientist", "java developer", "python developer"
+#     ]
+#     for keyword in keywords:
+#         fetch_and_store_jobs(query=keyword, max_pages=2)
+#     print("✅ Update complete.")
 
 if __name__ == "__main__":
-    update_jobs()
+    # update_jobs()
     remove_expired_jobs()
