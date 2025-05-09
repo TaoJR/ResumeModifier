@@ -19,13 +19,20 @@ HEADERS = {
 }
 
 # ✅ 向量生成函数（使用 OpenAI）
+EXPECTED_DIM = 1536  # text-embedding-3-small 的维度
+
 def generate_embedding(text, model="text-embedding-3-small"):
     try:
         response = openai.embeddings.create(input=[text], model=model)
-        return response.data[0].embedding
+        embedding = response.data[0].embedding
+        if len(embedding) != EXPECTED_DIM:
+            print(f"⚠️ Unexpected embedding dimension: {len(embedding)}, skipping this job.")
+            return None
+        return embedding
     except Exception as e:
         print(f"⚠️ Failed to generate embedding: {e}")
         return None
+
 
 # ✅ 主逻辑函数：爬取 + 向量计算 + 入库
 def fetch_and_store_jobs(query="developer", location=None, max_pages=3, remote_only=None, min_salary=None, date_posted=None):
