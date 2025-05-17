@@ -1,11 +1,16 @@
+import os
 from flask import Flask
 from app.job_api import job_api, fetch_and_store_jobs  # ✅ 引入 fetch_and_store_jobs
 from app.routes import api
 from app.database import collection  # ✅ 用于检查数据库中已有职位数量
 
+
+
 app = Flask(__name__)
 app.register_blueprint(job_api, url_prefix="/jobs")
 app.register_blueprint(api)
+
+print("Mongo URI:", os.environ.get("MONGO_URI"))
 
 # ✅ 自动预加载逻辑
 def preload_if_needed():
