@@ -33,5 +33,7 @@ def preload_if_needed():
         print(f"✅ Job count already sufficient ({job_count} jobs), skipping preload.")
 
 if __name__ == "__main__":
-    preload_if_needed()  # 🧠 加载初始化数据
-    app.run(host="0.0.0.0", port=5000)
+    preload_if_needed()
+    port = int(os.environ.get("PORT", 5000))  # Railway 会注入 PORT 环境变量
+    app.run(host="0.0.0.0", port=port)
+
