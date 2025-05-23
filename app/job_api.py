@@ -15,7 +15,7 @@ job_api = Blueprint("job_api", __name__)
 API_URL = "https://jsearch.p.rapidapi.com/search"
 HEADERS = {
     "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-    "X-RapidAPI-Key": "eaa381d7f1msh6d53c9dad8ab410p118824jsneb2763f234dd"
+    "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY")
 }
 
 # ✅ 向量生成函数（使用 OpenAI）
