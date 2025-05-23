@@ -34,6 +34,7 @@ def preload_if_needed():
 
 if __name__ == "__main__":
     preload_if_needed()
-    port = int(os.environ.get("PORT", 5000))  # Railway 会注入 PORT 环境变量
-    app.run(host="0.0.0.0", port=port)
+    port_env = os.environ.get("PORT", "5000")  # 先用字符串避免 int(None) 出错
+    print(f"🚀 PORT from env: {port_env}")
+    app.run(host="0.0.0.0", port=int(port_env))
 
