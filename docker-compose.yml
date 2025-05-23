@@ -5,8 +5,8 @@ services:
     build: .
     ports:
       - "5000:5000"
-    depends_on:
-      - mongo
+    # depends_on:
+    #   - mongo
     environment:
       - FLASK_ENV=development
     volumes:
@@ -14,12 +14,12 @@ services:
     env_file:
       - .env 
 
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
 
-volumes:
-  mongo_data:
+# volumes:
+#   mongo_data:

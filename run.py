@@ -3,10 +3,12 @@ from flask import Flask
 from app.job_api import job_api, fetch_and_store_jobs  # ✅ 引入 fetch_and_store_jobs
 from app.routes import api
 from app.database import collection  # ✅ 用于检查数据库中已有职位数量
+from flask_cors import CORS
 
 
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(job_api, url_prefix="/jobs")
 app.register_blueprint(api)
 
