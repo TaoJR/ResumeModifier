@@ -1,14 +1,13 @@
 name: Deploy Modifier to ECR
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: modifier-repo
   IMAGE_TAG: ${{ github.sha }}
-  KEEP_LAST_IMAGES: 5  #  保留最近5个镜像
+  KEEP_LAST_IMAGES: 2  #  保留最近5个镜像
 
 jobs:
   deploy-modifier:
@@ -38,7 +37,6 @@ jobs:
                        -t ${{ env.ECR_REPOSITORY }}:latest .
 
       - name: Tag and push backend image
-        if: github.repository == 'TaoJR/ResumeModifier'  # 主仓库才推送
         run: |
           ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
           docker tag ${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
